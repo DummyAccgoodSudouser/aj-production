@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Developer Toolbox — AJ Solution</title>
+<meta name="description" content="Client-side developer utilities — nothing you type ever leaves your browser.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="../music-player.css">
+</head>
+<body>
+
+  <header class="tb-header">
+    <button class="tb-menu-btn" id="menuBtn" aria-label="Toggle menu">☰</button>
+    <a href="../index.html" class="tb-back" title="Back to AJ Solution">←</a>
+    <h1 class="tb-logo">🧰 Developer Toolbox</h1>
+    <div class="tb-search-wrap">
+      <span class="tb-search-icon">🔍</span>
+      <input id="searchInput" class="tb-search" type="text" placeholder="Search tools… (⌘K)" autocomplete="off">
+      <div class="tb-search-results" id="searchResults"></div>
+    </div>
+  </header>
+
+  <div class="tb-body">
+    <nav class="tb-sidebar" id="sidebar">
+      <button class="tb-nav-item active" data-view="home"><span class="tb-nav-icon">🏠</span> Home</button>
+      <div class="tb-nav-cats" id="navCats"></div>
+      <button class="tb-nav-item" data-view="settings"><span class="tb-nav-icon">⚙️</span> Settings</button>
+    </nav>
+    <div class="tb-sidebar-backdrop" id="sidebarBackdrop"></div>
+
+    <main class="tb-main" id="main">
+      <!-- rendered by script.js -->
+    </main>
+  </div>
+
+  <div class="tb-palette-backdrop" id="paletteBackdrop">
+    <div class="tb-palette" id="palette">
+      <div class="tb-palette-input-row">
+        <span class="tb-palette-icon">⌘</span>
+        <input id="paletteInput" class="tb-palette-input" placeholder="Jump to a tool…" autocomplete="off">
+        <span class="tb-palette-esc">esc</span>
+      </div>
+      <div id="paletteResults" class="tb-palette-results"></div>
+    </div>
+  </div>
+
+  <script src="tools.js"></script>
+  <script src="script.js"></script>
+  <script src="../music-player.js" defer></script>
+</body>
+</html>
