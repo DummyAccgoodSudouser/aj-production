@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Digital Encyclopedia — AJ Solution</title>
+<meta name="description" content="Programming languages, Linux & Kali tools, editing software, AI, databases and a live multi-language dictionary — all in one searchable encyclopedia.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="../music-player.css">
+</head>
+<body>
+
+  <header class="e-header">
+    <button class="e-menu-btn" id="menuBtn" aria-label="Toggle menu">☰</button>
+    <a href="../index.html" class="e-back" title="Back to AJ Solution">←</a>
+    <h1 class="e-logo"><span class="e-logo-icon">📚</span> Digital Encyclopedia</h1>
+    <div class="e-search-wrap">
+      <span class="e-search-icon">🔍</span>
+      <input id="searchInput" class="e-search" type="text" placeholder="Search Python, chmod, nmap, flexbox…" autocomplete="off">
+      <div class="e-search-results" id="searchResults"></div>
+    </div>
+  </header>
+
+  <div class="e-body">
+    <nav class="e-sidebar" id="sidebar">
+      <button class="e-nav-item active" data-view="home"><span class="e-nav-icon">🏠</span> Home</button>
+      <div class="e-nav-label">Branches</div>
+      <div class="e-nav-branches" id="navBranches"></div>
+      <div class="e-nav-label">Explore</div>
+      <button class="e-nav-item" data-view="dictionary"><span class="e-nav-icon">📚</span> Dictionary</button>
+      <button class="e-nav-item" data-view="tags"><span class="e-nav-icon">🏷️</span> Browse by Tag</button>
+      <div class="e-nav-label">Account</div>
+      <button class="e-nav-item" data-view="settings"><span class="e-nav-icon">⚙️</span> Settings</button>
+    </nav>
+    <div class="e-sidebar-backdrop" id="sidebarBackdrop"></div>
+
+    <main class="e-main" id="main">
+      <!-- rendered by script.js -->
+    </main>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+  <script src="../music-player.js" defer></script>
+</body>
+</html>
