@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Games — AJ Solution</title>
+<meta name="description" content="Built-in games plus a curated directory of things to play.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="ac-header">
+    <button class="ac-menu-btn" id="menuBtn" aria-label="Toggle menu">☰</button>
+    <a href="../index.html" class="ac-back" title="Back to AJ Solution">←</a>
+    <h1 class="ac-logo">🎮 Games</h1>
+    <div class="ac-search-wrap">
+      <span class="ac-search-icon">🔍</span>
+      <input id="searchInput" class="ac-search" type="text" placeholder="Search games…" autocomplete="off">
+      <div class="ac-search-results" id="searchResults"></div>
+    </div>
+  </header>
+
+  <div class="ac-body">
+    <nav class="ac-sidebar" id="sidebar">
+      <button class="ac-nav-item active" data-view="home"><span class="ac-nav-icon">🏠</span> Home</button>
+      <div class="ac-nav-cats" id="navCats"></div>
+      <button class="ac-nav-item" data-view="leaderboard"><span class="ac-nav-icon">🏆</span> Rankings</button>
+    </nav>
+    <div class="ac-sidebar-backdrop" id="sidebarBackdrop"></div>
+
+    <main class="ac-main" id="main">
+      <!-- rendered by script.js -->
+    </main>
+  </div>
+
+  <script src="games-data.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
