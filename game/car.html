@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Traffic Racer — AJ Solution</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_shared.css">
+</head>
+<body>
+  <a class="back" href="../index.html">← BACK TO AJ SOLUTION</a>
+  <a class="back" href="leaderboard.html" style="margin-top:-10px;">🏆 View Rankings</a>
+  <h1>Traffic Racer</h1>
+  <div class="sub">UP ACCELERATE · DOWN BRAKE · LEFT/RIGHT STEER</div>
+  <div class="hud">
+    <div>DISTANCE<b id="score">0</b></div>
+    <div>SPEED<b id="speed">0</b></div>
+  </div>
+  <div class="stage">
+    <canvas id="game"></canvas>
+    <div class="overlay" id="overlay">
+      <div class="msg">Crashed</div>
+      <div class="hint">Click or press Enter to restart</div>
+    </div>
+  </div>
+  <div class="touch-controls">
+    <div class="dpad">
+      <button class="tbtn dp-up"
+        ontouchstart="keys['ArrowUp']=true" ontouchend="keys['ArrowUp']=false"
+        onmousedown="keys['ArrowUp']=true" onmouseup="keys['ArrowUp']=false">▲</button>
+      <button class="tbtn dp-left"
+        ontouchstart="keys['ArrowLeft']=true" ontouchend="keys['ArrowLeft']=false"
+        onmousedown="keys['ArrowLeft']=true" onmouseup="keys['ArrowLeft']=false">←</button>
+      <button class="tbtn dp-right"
+        ontouchstart="keys['ArrowRight']=true" ontouchend="keys['ArrowRight']=false"
+        onmousedown="keys['ArrowRight']=true" onmouseup="keys['ArrowRight']=false">→</button>
+      <button class="tbtn dp-down"
+        ontouchstart="keys['ArrowDown']=true" ontouchend="keys['ArrowDown']=false"
+        onmousedown="keys['ArrowDown']=true" onmouseup="keys['ArrowDown']=false">▼</button>
+    </div>
+  </div>
+  <div class="controls-hint">Hold up to build speed, ease off or brake into corners, and steer around the traffic.</div>
+  <script src="score-shim.js"></script>
+  <script type="module" src="leaderboard.js"></script>
+  <script src="car.js"></script>
+</body>
+</html>

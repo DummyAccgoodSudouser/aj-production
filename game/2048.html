@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>2048 — AJ Solution</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_shared.css">
+<style>
+  #board{
+    width:min(92vw, 460px); aspect-ratio:1/1;
+    background:linear-gradient(160deg, #171E2A 0%, #10141B 100%);
+    border:2px solid var(--line); box-shadow:0 0 0 1px rgba(255,180,84,0.08), 0 20px 50px -20px rgba(0,0,0,0.6);
+    border-radius:16px; display:grid; grid-template-columns:repeat(4,1fr); grid-template-rows:repeat(4,1fr);
+    gap:min(2.2vw, 10px); padding:min(2.2vw, 10px);
+  }
+  .cell{
+    background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.05);
+    border-radius:10px; display:flex; align-items:center; justify-content:center;
+    font-family:var(--mono-b); font-weight:700; font-size:clamp(20px, 6vw, 32px); color:var(--text); user-select:none;
+    transition:background 0.15s ease;
+  }
+</style>
+</head>
+<body>
+  <a class="back" href="../index.html">← BACK TO AJ SOLUTION</a>
+  <a class="back" href="leaderboard.html" style="margin-top:-10px;">🏆 View Rankings</a>
+  <h1>2048</h1>
+  <div class="sub">ARROWS / WASD / SWIPE TO SLIDE</div>
+  <div class="hud"><div>SCORE<b id="score">0</b></div></div>
+  <div class="stage">
+    <div id="board"></div>
+    <div class="overlay" id="overlay">
+      <div class="msg">Game over</div>
+      <div class="hint">Click or press Enter to restart</div>
+    </div>
+  </div>
+  <script src="score-shim.js"></script>
+  <script type="module" src="leaderboard.js"></script>
+  <script src="2048.js"></script>
+</body>
+</html>

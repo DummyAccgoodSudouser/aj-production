@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Memory Match — AJ Solution</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_shared.css">
+<style>
+  #board{
+    width:min(92vw, 460px); display:grid; grid-template-columns:repeat(4,1fr); gap:min(2.6vw, 12px);
+  }
+  .card{
+    aspect-ratio:1;
+    background:linear-gradient(160deg, #2A3446 0%, #1A2130 100%);
+    border:2px solid #333E52; border-radius:12px;
+    box-shadow:0 6px 14px -6px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06);
+    display:flex; align-items:center; justify-content:center;
+    font-size:clamp(24px, 7vw, 34px); cursor:pointer;
+    color:var(--cyan); transition:transform 0.15s ease, border-color 0.2s ease, background 0.2s ease;
+  }
+  .card:hover{ border-color:var(--amber); }
+  .card.up{
+    transform:scale(1.04); border-color:var(--cyan);
+    background:linear-gradient(160deg, rgba(92,207,230,0.18), rgba(92,207,230,0.05));
+    box-shadow:0 0 0 1px rgba(92,207,230,0.3), 0 10px 20px -8px rgba(92,207,230,0.35);
+  }
+  .card.done{
+    color:var(--green); border-color:var(--green); opacity:0.8; cursor:default;
+    background:linear-gradient(160deg, rgba(127,217,138,0.14), rgba(127,217,138,0.04));
+  }
+</style>
+</head>
+<body>
+  <a class="back" href="../index.html">← BACK TO AJ SOLUTION</a>
+  <a class="back" href="leaderboard.html" style="margin-top:-10px;">🏆 View Rankings</a>
+  <h1>Memory Match</h1>
+  <div class="sub">FLIP TWO CARDS, FIND EVERY PAIR</div>
+  <div class="hud">
+    <div>MOVES<b id="moves">0</b></div>
+    <div>TIME<b id="time">0s</b></div>
+  </div>
+  <div class="stage">
+    <div id="board"></div>
+    <div class="overlay" id="overlay">
+      <div class="msg">Cleared!</div>
+      <div class="hint">Click to play again</div>
+    </div>
+  </div>
+  <script src="score-shim.js"></script>
+  <script type="module" src="leaderboard.js"></script>
+  <script src="memory.js"></script>
+</body>
+</html>

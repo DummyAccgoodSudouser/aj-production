@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Tetris — AJ Solution</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_shared.css">
+<style>
+  .layout{ display:flex; gap:18px; align-items:flex-start; }
+  .side{ display:flex; flex-direction:column; gap:14px; align-items:center; }
+  .side-label{ font-family:var(--mono-d); font-size:10px; color:var(--text-dim); letter-spacing:0.12em; }
+  #pauseTag{ display:none; font-family:var(--mono-d); font-size:11px; color:var(--amber); margin-top:8px; }
+</style>
+</head>
+<body>
+  <a class="back" href="../index.html">← BACK TO AJ SOLUTION</a>
+  <a class="back" href="leaderboard.html" style="margin-top:-10px;">🏆 View Rankings</a>
+  <h1>Tetris</h1>
+  <div class="sub">ARROWS / WASD MOVE · UP/W ROTATE · SPACE HARD DROP · P PAUSE</div>
+  <div class="hud">
+    <div>SCORE<b id="score">0</b></div>
+    <div>LINES<b id="lines">0</b></div>
+    <div>LEVEL<b id="level">1</b></div>
+  </div>
+  <div class="layout">
+    <div class="stage">
+      <canvas id="game"></canvas>
+      <div class="overlay" id="overlay">
+        <div class="msg">Game over</div>
+        <div class="hint">Click or press Enter to restart</div>
+      </div>
+    </div>
+    <div class="side">
+      <div class="side-label">NEXT</div>
+      <canvas id="next"></canvas>
+      <div id="pauseTag">PAUSED</div>
+    </div>
+  </div>
+  <div class="touch-controls">
+    <div class="dpad">
+      <button class="tbtn dp-up" ontouchstart="rotate()" onclick="rotate()">↻</button>
+      <button class="tbtn dp-left" ontouchstart="move(-1)" onclick="move(-1)">←</button>
+      <button class="tbtn dp-right" ontouchstart="move(1)" onclick="move(1)">→</button>
+      <button class="tbtn dp-down" ontouchstart="drop()" onclick="drop()">↓</button>
+    </div>
+    <div class="action-stack">
+      <button class="tbtn-round" ontouchstart="hardDrop()" onclick="hardDrop()">DROP</button>
+    </div>
+  </div>
+  <script src="score-shim.js"></script>
+  <script type="module" src="leaderboard.js"></script>
+  <script src="tetris.js"></script>
+</body>
+</html>

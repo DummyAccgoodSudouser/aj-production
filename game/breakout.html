@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Breakout — AJ Solution</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_shared.css">
+</head>
+<body>
+  <a class="back" href="../index.html">← BACK TO AJ SOLUTION</a>
+  <a class="back" href="leaderboard.html" style="margin-top:-10px;">🏆 View Rankings</a>
+  <h1>Breakout</h1>
+  <div class="sub">ARROWS / A-D TO MOVE · SPACE TO LAUNCH</div>
+  <div class="hud">
+    <div>SCORE<b id="score">0</b></div>
+    <div>LIVES<b id="lives">3</b></div>
+  </div>
+  <div class="stage">
+    <canvas id="game"></canvas>
+    <div class="overlay" id="overlay">
+      <div class="msg">Game over</div>
+      <div class="hint">Click or press Enter to restart</div>
+    </div>
+  </div>
+  <div class="touch-controls" style="justify-content:center; gap:26px;">
+    <button class="tbtn" style="width:80px;height:80px;font-size:28px;"
+      ontouchstart="keys['ArrowLeft']=true" ontouchend="keys['ArrowLeft']=false"
+      onmousedown="keys['ArrowLeft']=true" onmouseup="keys['ArrowLeft']=false">←</button>
+    <button class="tbtn-round" ontouchstart="if(!launched&&alive)launched=true" onclick="if(!launched&&alive)launched=true">GO</button>
+    <button class="tbtn" style="width:80px;height:80px;font-size:28px;"
+      ontouchstart="keys['ArrowRight']=true" ontouchend="keys['ArrowRight']=false"
+      onmousedown="keys['ArrowRight']=true" onmouseup="keys['ArrowRight']=false">→</button>
+  </div>
+  <script src="score-shim.js"></script>
+  <script type="module" src="leaderboard.js"></script>
+  <script src="breakout.js"></script>
+</body>
+</html>

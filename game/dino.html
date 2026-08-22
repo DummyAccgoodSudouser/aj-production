@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Dino Jump — AJ Solution</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_shared.css">
+</head>
+<body>
+  <a class="back" href="../index.html">← BACK TO AJ SOLUTION</a>
+  <a class="back" href="leaderboard.html" style="margin-top:-10px;">🏆 View Rankings</a>
+  <h1>Dino Jump</h1>
+  <div class="sub">SPACE / UP / TAP TO JUMP</div>
+  <div class="hud"><div>SCORE<b id="score">0</b></div></div>
+  <div class="stage">
+    <canvas id="game"></canvas>
+    <div class="overlay" id="overlay">
+      <div class="msg">Game over</div>
+      <div class="hint">Click, tap, or press space to restart</div>
+    </div>
+  </div>
+  <div class="touch-controls" style="justify-content:center;">
+    <button class="tbtn-round" ontouchstart="jump()" onclick="jump()" style="width:96px;height:96px;font-size:14px;">JUMP</button>
+  </div>
+  <div class="controls-hint">Cacti and birds come faster the longer you survive.</div>
+  <script src="score-shim.js"></script>
+  <script type="module" src="leaderboard.js"></script>
+  <script src="dino.js"></script>
+</body>
+</html>

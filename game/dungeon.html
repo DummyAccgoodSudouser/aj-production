@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Dungeon Crawl — AJ Solution</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_shared.css">
+<style>
+  .layout{ display:flex; gap:18px; align-items:flex-start; flex-wrap:wrap; justify-content:center; }
+  .panel{
+    width:230px; background:var(--bg-panel); border:1px solid var(--line); border-radius:10px;
+    padding:16px; font-family:var(--mono-d);
+  }
+  .panel h2{ font-size:12px; letter-spacing:0.1em; color:var(--amber); margin-bottom:12px; text-transform:uppercase; }
+  .stat-row{ display:flex; justify-content:space-between; font-size:12px; color:var(--text-dim); margin-bottom:8px; }
+  .stat-row b{ color:var(--text); }
+  .bar-track{ height:8px; background:var(--line); border-radius:4px; overflow:hidden; margin-bottom:14px; }
+  #hpBar{ height:100%; background:linear-gradient(90deg, var(--rose), var(--amber)); width:100%; transition:width 0.2s ease; }
+  .btnrow{ display:flex; gap:8px; margin-top:10px; }
+  .btn{
+    flex:1; background:rgba(255,255,255,0.03); border:1px solid var(--line); color:var(--text);
+    font-family:var(--mono-d); font-size:11px; padding:9px 4px; border-radius:7px; cursor:pointer;
+    text-transform:uppercase; letter-spacing:0.06em;
+  }
+  .btn:hover{ border-color:var(--amber); color:var(--amber); }
+  #log{ display:flex; flex-direction:column; gap:5px; font-size:11px; line-height:1.4; max-height:220px; overflow-y:auto; margin-top:14px; }
+  #log div{ color:var(--text-dim); }
+  #log .good{ color:var(--green); }
+  #log .bad{ color:var(--rose); }
+  #log .sys{ color:var(--cyan); }
+</style>
+</head>
+<body>
+  <a class="back" href="../index.html">← BACK TO AJ SOLUTION</a>
+  <a class="back" href="leaderboard.html" style="margin-top:-10px;">🏆 View Rankings</a>
+  <h1>Dungeon Crawl</h1>
+  <div class="sub" id="levelName">THE OVERGROWN CRYPT — LV.1</div>
+  <div class="layout">
+    <div class="stage">
+      <canvas id="game"></canvas>
+      <div class="overlay" id="overlay">
+        <div class="msg">You have fallen</div>
+        <div class="hint">Click or press Enter to descend again</div>
+      </div>
+    </div>
+    <div class="panel">
+      <h2>Character</h2>
+      <div class="stat-row"><span>HP</span><b id="hp">20/20</b></div>
+      <div class="bar-track"><div id="hpBar"></div></div>
+      <div class="stat-row"><span>Attack</span><b id="atk">4</b></div>
+      <div class="stat-row"><span>Gems</span><b id="gold">0</b></div>
+      <div class="stat-row"><span>Potions</span><b id="potions">1</b></div>
+      <div class="btnrow">
+        <button class="btn" id="useBtn">Use potion (U)</button>
+        <button class="btn" id="tradeBtn">Trade (B)</button>
+      </div>
+      <h2 style="margin-top:18px">Log</h2>
+      <div id="log"></div>
+    </div>
+  </div>
+  <div class="touch-controls" style="justify-content:center;">
+    <div class="dpad">
+      <button class="tbtn dp-up" ontouchstart="tryMove(0,-1)" onclick="tryMove(0,-1)">↑</button>
+      <button class="tbtn dp-left" ontouchstart="tryMove(-1,0)" onclick="tryMove(-1,0)">←</button>
+      <button class="tbtn dp-right" ontouchstart="tryMove(1,0)" onclick="tryMove(1,0)">→</button>
+      <button class="tbtn dp-down" ontouchstart="tryMove(0,1)" onclick="tryMove(0,1)">↓</button>
+    </div>
+  </div>
+  <div class="controls-hint">Move the D-pad into a monster to attack it. Torchlight only reaches so far — the rest of the dungeon stays dark until you've seen it. Use the potion / trade buttons above for the merchant.</div>
+  <script src="score-shim.js"></script>
+  <script type="module" src="leaderboard.js"></script>
+  <script src="dungeon.js"></script>
+</body>
+</html>

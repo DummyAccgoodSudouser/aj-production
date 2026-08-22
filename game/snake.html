@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Snake — AJ Solution</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_shared.css">
+</head>
+<body>
+  <a class="back" href="../index.html">← BACK TO AJ SOLUTION</a>
+  <a class="back" href="leaderboard.html" style="margin-top:-10px;">🏆 View Rankings</a>
+  <h1>Snake</h1>
+  <div class="sub">ARROWS / WASD TO MOVE</div>
+  <div class="hud"><div>SCORE<b id="score">0</b></div></div>
+  <div class="stage">
+    <canvas id="game"></canvas>
+    <div class="overlay" id="overlay">
+      <div class="msg">Game over</div>
+      <div class="hint">Click to restart</div>
+    </div>
+  </div>
+  <div class="touch-controls">
+    <div class="dpad">
+      <button class="tbtn dp-up" ontouchstart="setDir(0,-1)" onclick="setDir(0,-1)">↑</button>
+      <button class="tbtn dp-left" ontouchstart="setDir(-1,0)" onclick="setDir(-1,0)">←</button>
+      <button class="tbtn dp-right" ontouchstart="setDir(1,0)" onclick="setDir(1,0)">→</button>
+      <button class="tbtn dp-down" ontouchstart="setDir(0,1)" onclick="setDir(0,1)">↓</button>
+    </div>
+  </div>
+  <div class="controls-hint">Eat the pink orb to grow. Hitting the wall or your own tail ends the run.</div>
+  <script src="score-shim.js"></script>
+  <script type="module" src="leaderboard.js"></script>
+  <script src="snake.js"></script>
+</body>
+</html>

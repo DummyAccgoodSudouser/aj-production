@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Rankings — AJ Solution</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_shared.css">
+<style>
+  .wrap{ width:100%; max-width:520px; }
+  .tabs{ display:flex; gap:6px; flex-wrap:wrap; margin-bottom:18px; justify-content:center; }
+  .tab{
+    font-family:var(--mono-d); font-size:11px; letter-spacing:0.05em; text-transform:uppercase;
+    padding:8px 12px; border-radius:8px; border:1px solid var(--line); color:var(--text-dim);
+    background:var(--bg-panel); cursor:pointer;
+  }
+  .tab.active{ color:var(--amber); border-color:var(--amber); background:rgba(255,180,84,0.08); }
+  .board{
+    width:100%; background:var(--bg-panel); border:1px solid var(--line); border-radius:12px;
+    overflow:hidden;
+  }
+  .row{
+    display:flex; align-items:center; gap:14px; padding:13px 16px; border-bottom:1px solid var(--line);
+  }
+  .row:last-child{ border-bottom:none; }
+  .rank{ font-family:var(--mono-b); font-weight:700; font-size:15px; color:var(--text-dim); width:26px; text-align:center; }
+  .row:nth-child(1) .rank{ color:#FFD166; }
+  .row:nth-child(2) .rank{ color:#C7CEDB; }
+  .row:nth-child(3) .rank{ color:#D18A56; }
+  .rname{ flex:1; font-size:14px; }
+  .rscore{ font-family:var(--mono-b); font-weight:700; color:var(--amber); }
+  .empty{ padding:30px 16px; text-align:center; color:var(--text-dim); font-family:var(--mono-d); font-size:12px; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <a class="back" href="../index.html">← BACK TO AJ SOLUTION</a>
+    <h1>Rankings</h1>
+    <div class="sub">TOP 10 PER GAME · UPDATES LIVE</div>
+    <div class="tabs" id="tabs"></div>
+    <div class="board" id="board">
+      <div class="empty">Loading…</div>
+    </div>
+  </div>
+  <script type="module" src="leaderboard-view.js"></script>
+</body>
+</html>
