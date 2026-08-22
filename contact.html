@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>AJ Lab — Interface Design Studio</title>
+<meta name="description" content="AJ Lab designs interfaces that hold up under real use.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0a0d14;
+    --ink-2:#10141d;
+    --line: rgba(150,180,255,0.14);
+    --line-strong: rgba(150,180,255,0.32);
+    --paper:#eef1f8;
+    --paper-dim: #9aa3ba;
+    --amber:#ff9a4d;
+    --cyan:#7fd9ff;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+    --disp: 'Space Grotesk', sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--ink);
+    color:var(--paper);
+    font-family:var(--sans);
+    overflow-x:hidden;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+  }
+
+  .grid-bg{
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 56px 56px;
+    -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, black 40%, transparent 85%);
+            mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, black 40%, transparent 85%);
+  }
+
+  a{color:inherit; text-decoration:none;}
+
+  header{
+    position:sticky; top:0; z-index:50;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:22px clamp(20px,5vw,64px);
+    background:rgba(10,13,20,0.75);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .logo{
+    display:flex; align-items:center; gap:10px;
+    font-family:var(--disp); font-weight:700; font-size:19px; letter-spacing:0.02em;
+  }
+  .logo-mark{
+    width:26px; height:26px; border:1.5px solid var(--paper);
+    border-radius:4px; position:relative; flex-shrink:0;
+  }
+  .logo-mark::after{
+    content:""; position:absolute; inset:5px;
+    border-left:1.5px solid var(--amber);
+    border-bottom:1.5px solid var(--amber);
+  }
+  nav ul{list-style:none; display:flex; gap:clamp(16px,3vw,36px); align-items:center;}
+  nav a{
+    font-size:14px; color:var(--paper-dim);
+    transition:color .2s;
+  }
+  nav a:hover{color:var(--paper);}
+  .nav-cta{
+    border:1px solid var(--line-strong); padding:8px 16px; border-radius:6px;
+    font-family:var(--mono); font-size:12.5px; color:var(--paper) !important;
+  }
+  .nav-cta:hover{border-color:var(--amber); background:rgba(255,154,77,0.08);}
+  .nav-links{display:flex; align-items:center; gap:clamp(16px,3vw,36px);}
+  @media (max-width:720px){ .nav-links ul{display:none;} }
+  .back-link{
+    font-family:var(--mono); font-size:12.5px; color:var(--paper-dim);
+    display:flex; align-items:center; gap:6px;
+  }
+  .back-link:hover{ color:var(--cyan); }
+
+  section{position:relative; z-index:1;}
+
+  .hero{
+    min-height:92vh;
+    display:flex; flex-direction:column; justify-content:center;
+    padding:0 clamp(20px,5vw,64px);
+    position:relative;
+  }
+  .eyebrow{
+    font-family:var(--mono); font-size:12.5px; color:var(--cyan);
+    letter-spacing:0.12em; text-transform:uppercase;
+    display:flex; align-items:center; gap:10px; margin-bottom:22px;
+  }
+  .eyebrow::before{
+    content:""; width:7px; height:7px; background:var(--cyan); border-radius:50%;
+    box-shadow:0 0 10px var(--cyan);
+    animation:pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:.35;} }
+  h1.hero-title{
+    font-family:var(--disp); font-weight:700;
+    font-size:clamp(48px, 9vw, 112px);
+    line-height:0.98; letter-spacing:-0.02em;
+    max-width:16ch;
+  }
+  h1.hero-title em{
+    font-style:normal; color:transparent;
+    -webkit-text-stroke:1.5px var(--paper);
+  }
+  .hero-sub{
+    font-size:clamp(16px,2vw,19px); color:var(--paper-dim);
+    max-width:52ch; margin-top:26px; line-height:1.6;
+  }
+  .hero-actions{ display:flex; gap:14px; margin-top:38px; flex-wrap:wrap; }
+  .btn{
+    font-family:var(--mono); font-size:13.5px;
+    padding:14px 24px; border-radius:6px;
+    display:inline-flex; align-items:center; gap:8px;
+    transition:transform .18s ease, border-color .18s ease, background .18s ease;
+  }
+  .btn-primary{ background:var(--paper); color:var(--ink); font-weight:500; }
+  .btn-primary:hover{ transform:translateY(-2px); background:var(--amber); }
+  .btn-ghost{ border:1px solid var(--line-strong); }
+  .btn-ghost:hover{ border-color:var(--paper); transform:translateY(-2px); }
+
+  .coord{
+    position:fixed; z-index:40; pointer-events:none;
+    font-family:var(--mono); font-size:11px; color:var(--cyan);
+    background:rgba(10,13,20,0.85); border:1px solid var(--line-strong);
+    padding:3px 8px; border-radius:4px; opacity:0; transition:opacity .2s;
+    white-space:nowrap;
+  }
+  @media (max-width:900px){ .coord{display:none;} }
+
+  .scan-line{
+    position:absolute; left:0; right:0; height:1px;
+    background:linear-gradient(90deg, transparent, var(--cyan), transparent);
+    opacity:0.55; top:0;
+    animation:scan 7s linear infinite;
+  }
+  @keyframes scan{
+    0%{ top:6%; opacity:0;}
+    8%{opacity:.55;}
+    92%{opacity:.55;}
+    100%{ top:96%; opacity:0;}
+  }
+
+  .section-inner{
+    max-width:1180px; margin:0 auto;
+    padding:120px clamp(20px,5vw,64px);
+  }
+  .section-head{
+    display:flex; justify-content:space-between; align-items:flex-end;
+    gap:24px; margin-bottom:56px; border-bottom:1px solid var(--line); padding-bottom:24px;
+    flex-wrap:wrap;
+  }
+  .section-tag{ font-family:var(--mono); font-size:12.5px; color:var(--paper-dim); }
+  h2.section-title{
+    font-family:var(--disp); font-weight:600;
+    font-size:clamp(30px,4vw,46px); letter-spacing:-0.01em;
+  }
+
+  .mission-grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:64px;
+  }
+  @media (max-width:820px){ .mission-grid{grid-template-columns:1fr;} }
+  .mission-grid p{
+    font-size:17px; line-height:1.75; color:var(--paper-dim); margin-bottom:18px;
+  }
+  .mission-grid p strong{ color:var(--paper); font-weight:500; }
+
+  .cap-grid{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:1px;
+    background:var(--line); border:1px solid var(--line);
+  }
+  @media (max-width:820px){ .cap-grid{grid-template-columns:1fr;} }
+  .cap-card{
+    background:var(--ink); padding:36px 30px; transition:background .2s;
+  }
+  .cap-card:hover{ background:var(--ink-2); }
+  .cap-num{ font-family:var(--mono); color:var(--amber); font-size:13px; margin-bottom:20px; display:block; }
+  .cap-card h3{ font-family:var(--disp); font-size:21px; font-weight:600; margin-bottom:12px; }
+  .cap-card p{ color:var(--paper-dim); font-size:14.5px; line-height:1.65; }
+
+  .process-list{ display:flex; flex-direction:column; }
+  .proc-row{
+    display:grid; grid-template-columns:80px 1fr 1.4fr; gap:32px;
+    padding:30px 0; border-bottom:1px solid var(--line);
+    align-items:start;
+  }
+  .proc-row:first-child{ border-top:1px solid var(--line); }
+  @media (max-width:720px){
+    .proc-row{ grid-template-columns:50px 1fr; }
+    .proc-row .proc-desc{ grid-column:2/3; }
+  }
+  .proc-idx{ font-family:var(--mono); color:var(--amber); font-size:14px; padding-top:4px; }
+  .proc-name{ font-family:var(--disp); font-weight:600; font-size:22px; }
+  .proc-desc{ color:var(--paper-dim); font-size:15px; line-height:1.65; }
+
+  .cta-band{
+    border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+    text-align:center;
+  }
+  .cta-band .section-inner{ padding:110px clamp(20px,5vw,64px); }
+  .cta-band h2{
+    font-family:var(--disp); font-weight:700;
+    font-size:clamp(32px,5.5vw,64px); letter-spacing:-0.02em; margin-bottom:28px;
+  }
+  .cta-band p{ color:var(--paper-dim); font-size:17px; margin-bottom:38px; }
+
+  footer{
+    padding:48px clamp(20px,5vw,64px);
+    display:flex; justify-content:space-between; align-items:center;
+    flex-wrap:wrap; gap:16px;
+    font-family:var(--mono); font-size:12.5px; color:var(--paper-dim);
+  }
+  footer a:hover{ color:var(--paper); }
+  .foot-links{ display:flex; gap:22px; }
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+<div class="coord" id="coord">X 000 · Y 000</div>
+
+<header>
+  <div class="logo">
+    <span class="logo-mark"></span>
+    AJ LAB
+  </div>
+  <div class="nav-links">
+    <a class="back-link" href="index.html">← AJ Solution</a>
+    <nav>
+      <ul>
+        <li><a href="#mission">Mission</a></li>
+        <li><a href="#work">Capabilities</a></li>
+        <li><a href="#process">Process</a></li>
+        <li><a href="#contact" class="nav-cta">Start a project →</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="scan-line"></div>
+  <div class="eyebrow">Interface design lab</div>
+  <h1 class="hero-title">We build <em>UI</em> that survives contact with real users.</h1>
+  <p class="hero-sub">AJ Lab is a small studio that designs and prototypes interfaces — from first sketch to a system your team can actually ship and maintain.</p>
+  <div class="hero-actions">
+    <a href="#contact" class="btn btn-primary">Start a project</a>
+    <a href="#work" class="btn btn-ghost">See what we do</a>
+  </div>
+</section>
+
+<section id="mission">
+  <div class="section-inner">
+    <div class="section-head">
+      <h2 class="section-title">Why AJ Lab exists</h2>
+      <div class="section-tag">01 / Mission</div>
+    </div>
+    <div class="mission-grid">
+      <p><strong>Most UI work stalls between the mockup and the build.</strong> A design looks finished in a file and falls apart the moment real data, real states, and real edge cases show up. We close that gap by designing with the constraints of the product from day one.</p>
+      <p>We work in small, direct teams — no account layers, no hand-offs that lose context. <strong>The person who designs the flow is the person who checks it in the browser.</strong> That's how interfaces stay coherent as they grow.</p>
+    </div>
+  </div>
+</section>
+
+<section id="work">
+  <div class="section-inner">
+    <div class="section-head">
+      <h2 class="section-title">What we do</h2>
+      <div class="section-tag">02 / Capabilities</div>
+    </div>
+    <div class="cap-grid">
+      <div class="cap-card">
+        <span class="cap-num">01</span>
+        <h3>Interface Systems</h3>
+        <p>Component libraries and design tokens built to hold up across a whole product, not just one screen.</p>
+      </div>
+      <div class="cap-card">
+        <span class="cap-num">02</span>
+        <h3>Prototyping</h3>
+        <p>Interactive, code-backed prototypes so decisions get tested against real behavior before a line of production code is written.</p>
+      </div>
+      <div class="cap-card">
+        <span class="cap-num">03</span>
+        <h3>Design Engineering</h3>
+        <p>Front-end implementation that keeps the built product honest to the design intent — down to motion and micro-states.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="process">
+  <div class="section-inner">
+    <div class="section-head">
+      <h2 class="section-title">How a project runs</h2>
+      <div class="section-tag">03 / Process</div>
+    </div>
+    <div class="process-list">
+      <div class="proc-row">
+        <div class="proc-idx">01</div>
+        <div class="proc-name">Discover</div>
+        <div class="proc-desc">We map the problem, the users, and the constraints before we open a design tool. Most missteps get caught here.</div>
+      </div>
+      <div class="proc-row">
+        <div class="proc-idx">02</div>
+        <div class="proc-name">Prototype</div>
+        <div class="proc-desc">Working, clickable prototypes replace static mockups so the team is reacting to something real.</div>
+      </div>
+      <div class="proc-row">
+        <div class="proc-idx">03</div>
+        <div class="proc-name">Refine</div>
+        <div class="proc-desc">We test the interface against real content and real usage, then tighten it — spacing, states, copy, motion.</div>
+      </div>
+      <div class="proc-row">
+        <div class="proc-idx">04</div>
+        <div class="proc-name">Ship</div>
+        <div class="proc-desc">We hand off a build-ready system, or implement it ourselves, with documentation your team can maintain.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-band" id="contact">
+  <div class="section-inner">
+    <h2>Have an interface<br>worth getting right?</h2>
+    <p>Tell us what you're building — we'll reply within two business days.</p>
+    <a href="mailto:aj.production.admin.1@gmail.com" class="btn btn-primary">aj.production.admin.1@gmail.com</a>
+  </div>
+</section>
+
+<footer>
+  <div>© <span id="year"></span> AJ Lab. All rights reserved.</div>
+  <div class="foot-links">
+    <a href="index.html">Back to AJ Solution</a>
+    <a href="mailto:aj.production.admin.1@gmail.com">Email</a>
+    <a href="#mission">Back to top</a>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  const coord = document.getElementById('coord');
+  const isFine = window.matchMedia('(pointer:fine)').matches;
+  if(isFine){
+    window.addEventListener('mousemove', (e)=>{
+      coord.style.opacity = 1;
+      coord.style.left = (e.clientX + 16) + 'px';
+      coord.style.top = (e.clientY + 16) + 'px';
+      const x = String(Math.round(e.clientX)).padStart(3,'0');
+      const y = String(Math.round(e.clientY)).padStart(3,'0');
+      coord.textContent = `X ${x} · Y ${y}`;
+    });
+    window.addEventListener('mouseleave', ()=> coord.style.opacity = 0);
+  }
+</script>
+
+</body>
+</html>

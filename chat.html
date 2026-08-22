@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Live Chat — AJ Solution</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="chat.css">
+  <link rel="stylesheet" href="music-player.css">
+</head>
+<body>
+
+  <div class="app" id="app">
+    <!-- ===== LIST PANEL ===== -->
+    <div class="list-panel">
+      <div class="list-header">
+        <div class="brand">
+          <div class="avatar" id="myAvatarBtn" style="cursor:pointer; width:34px; height:34px; font-size:13px;"></div>
+          <h1>Live Chat</h1>
+        </div>
+        <div class="hdr-actions">
+          <button class="icon-btn" id="newGroupBtn" title="New group">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3.2"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M18 9v6M21 12h-6"/></svg>
+          </button>
+          <button class="icon-btn" id="bgPickerBtn" title="Chat background">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16v14H4z"/><circle cx="9" cy="10" r="1.5"/><path d="M4 16l5-5 4 4 3-3 4 4"/></svg>
+          </button>
+          <button class="icon-btn" id="settingsBtn" title="Settings">
+            <img src="assets/settings-gear-icon.gif" alt="Settings" style="width:22px; height:22px; object-fit:cover; border-radius:5px;">
+          </button>
+          <a class="icon-btn" href="index.html" title="Back to AJ Solution">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="tabs">
+        <div class="tab active" data-tab="chats" id="tabChats">Chats</div>
+        <div class="tab" data-tab="people" id="tabPeople">People</div>
+      </div>
+
+      <div class="search-row">
+        <input id="searchInput" type="text" placeholder="Search…" autocomplete="off">
+      </div>
+
+      <div class="list-scroll" id="chatsList"></div>
+      <div class="list-scroll" id="peopleList" style="display:none;"></div>
+    </div>
+
+    <!-- ===== CONVERSATION PANEL ===== -->
+    <div class="convo-panel empty" id="convoPanel">
+      <span>Select a chat to start messaging</span>
+    </div>
+  </div>
+
+  <div class="toast-stack" id="toastStack"></div>
+
+  <!-- Invite code gate -->
+  <div class="modal" id="codeModal">
+    <div class="modal-card">
+      <h2>Private room</h2>
+      <p>This chat is invite-only. Enter the code you were given to continue.</p>
+      <input id="codeInput" type="text" placeholder="Invite code" autocomplete="off">
+      <div id="codeError" style="display:none; color:var(--rose); font-family:var(--mono-d); font-size:11px; margin:-8px 0 12px;">Wrong code — try again.</div>
+      <button class="primary" id="codeSubmitBtn">Unlock</button>
+    </div>
+  </div>
+
+  <!-- Onboarding -->
+  <div class="modal" id="nameModal">
+    <div class="modal-card">
+      <h2>Set up your profile</h2>
+      <p>This is shown to others in chat. No email or account needed — just stored for this device.</p>
+      <input id="nameInput" type="text" placeholder="Your name" maxlength="24">
+      <textarea id="aboutInput" placeholder="About (optional)" maxlength="60" rows="2"></textarea>
+      <button class="primary" id="nameSaveBtn">Start chatting</button>
+    </div>
+  </div>
+
+  <!-- Own profile / edit -->
+  <div class="modal" id="myProfileModal">
+    <div class="modal-card profile-view">
+      <div class="avatar-edit-wrap">
+        <div class="avatar lg" id="myProfileAvatar"></div>
+        <div class="edit-badge" id="editPhotoBtn">✎</div>
+      </div>
+      <input class="upload-input" type="file" id="photoInput" accept="image/*">
+      <input id="editNameInput" type="text" placeholder="Your name" maxlength="24" style="margin-top:6px;">
+      <textarea id="editAboutInput" placeholder="About" maxlength="60" rows="2"></textarea>
+      <button class="primary" id="saveProfileBtn">Save</button>
+      <button class="ghost" id="closeProfileBtn">Close</button>
+    </div>
+  </div>
+
+  <!-- Other user's profile (view + "Message" button) -->
+  <div class="modal" id="otherProfileModal">
+    <div class="modal-card profile-view">
+      <div class="avatar lg" id="otherAvatar"></div>
+      <div class="p-name" id="otherName"></div>
+      <div class="p-about" id="otherAbout"></div>
+      <button class="primary" id="messageBtn">Message</button>
+      <button class="ghost" id="closeOtherProfileBtn">Close</button>
+    </div>
+  </div>
+
+  <!-- Chat background picker -->
+  <div class="modal" id="bgModal">
+    <div class="modal-card" style="max-width:420px;">
+      <h2>Chat background</h2>
+      <p>Pick a looping scene for your conversations, and how strong it shows behind your messages. This is saved on this device only — everyone can choose their own.</p>
+      <div class="bg-grid" id="bgGrid"></div>
+      <div class="opacity-row">
+        <span class="op-label">Opacity</span>
+        <input type="range" id="bgOpacitySlider" min="5" max="80" value="35">
+        <span class="op-val" id="bgOpacityVal">35%</span>
+      </div>
+      <button class="ghost" id="closeBgBtn">Done</button>
+    </div>
+  </div>
+
+  <!-- Settings reveal overlay: black screen + spinning gear gif, plays once then fades to reveal settings panel -->
+  <div class="settings-reveal" id="settingsReveal">
+    <img src="assets/settings-gear-reveal.gif" alt="" id="settingsRevealGif">
+  </div>
+
+  <!-- Live chat settings -->
+  <div class="modal" id="settingsModal">
+    <div class="modal-card" style="max-width:420px;">
+      <h2>Chat settings</h2>
+
+      <div class="settings-row">
+        <div class="settings-row-text">
+          <div class="settings-row-title">Notifications</div>
+          <div class="settings-row-sub" id="notifStatusSub">Get notified when a message arrives on a chat you're not viewing.</div>
+        </div>
+        <button class="toggle-switch" id="notifToggle" role="switch" aria-checked="false">
+          <span class="toggle-knob"></span>
+        </button>
+      </div>
+
+      <button class="ghost" id="closeSettingsBtn">Done</button>
+    </div>
+  </div>
+
+  <!-- Create group -->
+  <div class="modal" id="groupCreateModal">
+    <div class="modal-card" style="max-width:380px;">
+      <h2>New group</h2>
+      <p>Name it and pick who's in — everyone added can message the whole group.</p>
+      <input id="groupNameInput" type="text" placeholder="Group name" maxlength="30">
+      <div class="member-picker" id="groupMemberPicker"></div>
+      <button class="primary" id="groupCreateBtn">Create group</button>
+      <button class="ghost" id="groupCreateCancelBtn">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Group info: members, add, leave -->
+  <div class="modal" id="groupInfoModal">
+    <div class="modal-card profile-view" style="max-width:380px;">
+      <div class="avatar lg group" id="groupInfoAvatar"></div>
+      <div class="p-name" id="groupInfoName"></div>
+      <div class="p-about" id="groupInfoCount"></div>
+      <div class="member-picker" id="groupInfoMembers" style="text-align:left; margin-bottom:14px;"></div>
+      <button class="ghost" id="groupAddMembersBtn">+ Add members</button>
+      <button class="ghost" id="groupLeaveBtn" style="color:var(--rose); border-color:rgba(255,143,163,0.35);">Leave group</button>
+      <button class="ghost" id="closeGroupInfoBtn">Close</button>
+    </div>
+  </div>
+
+  <!-- Add members to existing group -->
+  <div class="modal" id="groupAddModal">
+    <div class="modal-card" style="max-width:380px;">
+      <h2>Add members</h2>
+      <p>Pick who else should join this group.</p>
+      <div class="member-picker" id="groupAddPicker"></div>
+      <button class="primary" id="groupAddConfirmBtn">Add</button>
+      <button class="ghost" id="groupAddCancelBtn">Cancel</button>
+    </div>
+  </div>
+
+  <script type="module" src="chat.js"></script>
+  <script src="music-player.js" defer></script>
+</body>
+</html>

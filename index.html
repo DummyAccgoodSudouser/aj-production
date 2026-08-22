@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>AJ Solution Pvt Ltd</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="music-player.css">
+</head>
+<body>
+
+  <div id="bootLoader">
+    <div class="boot-label">INITIALIZING SYSTEM</div>
+    <div class="boot-track"><div class="boot-fill" id="bootFill"></div></div>
+    <div class="boot-pct" id="bootPct">00%</div>
+    <div class="boot-brand">AJ SOLUTION</div>
+  </div>
+
+  <!-- holographic backdrop: starfield + dot-matrix rotating earth + digital rain -->
+  <div class="cosmos" aria-hidden="true">
+    <canvas id="matrixCanvas" class="matrix-canvas"></canvas>
+    <div class="stars" id="stars"></div>
+    <div class="earth-wrap">
+      <div class="earth-glow"></div>
+      <canvas id="earthCanvas" class="earth-canvas" width="560" height="560"></canvas>
+      <div class="earth-rim"></div>
+      <div class="earth-ring ring-a"></div>
+      <div class="earth-ring ring-b"></div>
+      <svg class="orbit-arcs" viewBox="0 0 560 560">
+        <path id="arcPath1" d="M 40 320 Q 120 180 260 90" fill="none" stroke="rgba(120,255,220,0.35)" stroke-width="1" stroke-dasharray="1 7"/>
+        <path id="arcPath2" d="M 70 420 Q 160 340 300 330" fill="none" stroke="rgba(92,230,199,0.3)" stroke-width="1" stroke-dasharray="1 6"/>
+        <circle r="3" fill="#8CFFE0"><animateMotion dur="6s" repeatCount="indefinite"><mpath href="#arcPath1"/></animateMotion></circle>
+        <circle r="2.4" fill="#5CE6C7"><animateMotion dur="8s" repeatCount="indefinite"><mpath href="#arcPath2"/></animateMotion></circle>
+      </svg>
+    </div>
+    <div class="scanlines"></div>
+  </div>
+
+  <div class="wrap">
+    <header class="hero">
+      <div class="boot-line"><span class="dot"></span> SYSTEM ONLINE — ALL MODULES CONNECTED</div>
+      <h1>AJ Solution<span>Private Limited</span></h1>
+      <p class="tag">A single control panel for every tool you reach for — AI models, games, editors and more, wired up and ready to launch.</p>
+      <div class="hero-meta" id="heroMeta"></div>
+    </header>
+
+    <div class="panel-label">System status</div>
+    <div id="systemStatus"></div>
+
+    <div class="panel-label">Select a channel</div>
+    <div class="switchboard" id="switchboard"></div>
+
+    <div class="grid" id="grid"></div>
+
+    <footer>
+      <span>AJ SOLUTION PVT LTD — © 2026</span>
+      <a href="contact.html" style="color:var(--text-dim); text-decoration:none;">Reach Us</a>
+      <span id="countTag">— MODULES LOADED</span>
+    </footer>
+  </div>
+
+  <script src="globe.js"></script>
+  <script src="matrix.js"></script>
+  <script src="boot-loader.js"></script>
+  <script src="system-status.js"></script>
+  <script src="script.js"></script>
+  <script src="music-player.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Games — AJ Solution</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --background:#050508; --foreground:#f0f0f8; --card:#0d0d14; --card-foreground:#d0d0e0;
+    --primary:#7c3aed; --secondary:#1a1a28; --secondary-foreground:#a0a0c0;
+    --muted-foreground:#606080; --accent:#06b6d4; --border:rgba(120,120,180,0.12);
+    --neon-purple:#bf5fff; --green:#10b981; --amber:#f59e0b; --red:#ef4444;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Outfit', sans-serif; background:var(--background); color:var(--foreground);
+    overflow-x:hidden; -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit; text-decoration:none;}
+  ::-webkit-scrollbar{width:4px;}
+  ::-webkit-scrollbar-track{background:var(--background);}
+  ::-webkit-scrollbar-thumb{background:var(--primary); border-radius:2px;}
+
+  .mono{ font-family:'JetBrains Mono', monospace; }
+  .noise::before{
+    content:''; position:fixed; inset:0; pointer-events:none; z-index:9999;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity:0.04;
+  }
+  .grid-bg{
+    background-image:
+      linear-gradient(rgba(120,120,200,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(120,120,200,0.04) 1px, transparent 1px);
+    background-size:60px 60px;
+  }
+  .perspective{ perspective:1600px; }
+
+  @keyframes floatA{ 0%,100%{transform:translateY(0) rotateX(15deg) rotateY(20deg);} 50%{transform:translateY(-20px) rotateX(20deg) rotateY(25deg);} }
+  @keyframes floatB{ 0%,100%{transform:translateY(0) rotateX(-10deg) rotateY(-15deg);} 50%{transform:translateY(15px) rotateX(-15deg) rotateY(-20deg);} }
+  @keyframes floatC{ 0%,100%{transform:translateY(0) rotateY(30deg);} 50%{transform:translateY(-12px) rotateY(35deg);} }
+  @keyframes scanline{ 0%{top:-10%;} 100%{top:110%;} }
+  @keyframes pulseNeon{ 0%,100%{opacity:1;} 50%{opacity:0.5;} }
+  @keyframes slideUp{ from{opacity:0; transform:translateY(40px);} to{opacity:1; transform:translateY(0);} }
+  @keyframes fadeIn{ from{opacity:0;} to{opacity:1;} }
+  @keyframes marquee{ 0%{transform:translateX(0);} 100%{transform:translateX(-50%);} }
+  @keyframes spin3d{ 0%{transform:rotateY(0) rotateX(10deg);} 100%{transform:rotateY(360deg) rotateX(10deg);} }
+  @keyframes loaderProgress{ 0%{width:0%;} 100%{width:100%;} }
+
+  .animate-float-a{ animation:floatA 6s ease-in-out infinite; }
+  .animate-float-b{ animation:floatB 8s ease-in-out infinite; }
+  .animate-float-c{ animation:floatC 7s ease-in-out infinite; }
+  .animate-pulse-neon{ animation:pulseNeon 2s ease-in-out infinite; }
+  .animate-fade-in{ animation:fadeIn 1s ease forwards; }
+  .animate-spin3d{ animation:spin3d 20s linear infinite; }
+
+  /* ---------- LOADER ---------- */
+  #loader{ position:fixed; inset:0; z-index:9999; display:flex; flex-direction:column; align-items:center; justify-content:center; background:#050508; transition:opacity .3s ease; }
+  #loader .label{ font-size:11px; letter-spacing:0.4em; color:#606080; text-transform:uppercase; margin-bottom:32px; }
+  #loader .track{ width:260px; height:1px; background:#1a1a28; position:relative; overflow:hidden; }
+  #loader .fill{ position:absolute; top:0; left:0; height:100%; width:0%; background:linear-gradient(90deg, #7c3aed, #06b6d4); }
+  #loader .pct{ margin-top:24px; font-family:'JetBrains Mono',monospace; font-size:30px; font-weight:700; color:#fff; }
+  #loader .brand{ margin-top:16px; font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.3em; color:#606080; text-transform:uppercase; }
+
+  /* ---------- ORBS ---------- */
+  .orb{ position:absolute; border-radius:50%; filter:blur(90px); pointer-events:none; opacity:0.15; }
+
+  /* ---------- NAV ---------- */
+  nav{ position:fixed; top:0; left:0; right:0; z-index:50; transition:all .4s ease; }
+  nav.scrolled{ background:rgba(5,5,8,0.9); backdrop-filter:blur(10px); border-bottom:1px solid rgba(255,255,255,0.05); }
+  .nav-inner{ max-width:1200px; margin:0 auto; padding:0 24px; height:64px; display:flex; align-items:center; justify-content:space-between; }
+  .nav-logo{ color:#fff; font-weight:800; font-size:19px; letter-spacing:-0.02em; }
+  .nav-logo span{ color:var(--accent); }
+  .nav-links{ display:flex; gap:40px; list-style:none; }
+  .nav-links a{ font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.15em; color:#a0a0c0; text-transform:uppercase; transition:color .2s; }
+  .nav-links a:hover{ color:#fff; }
+  .nav-cta{
+    font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.15em; text-transform:uppercase;
+    color:var(--accent); border:1px solid rgba(6,182,212,0.3); padding:8px 18px; transition:all .3s;
+  }
+  .nav-cta:hover{ background:rgba(6,182,212,0.1); }
+  @media (max-width:820px){ .nav-links{ display:none; } }
+
+  /* ---------- HERO ---------- */
+  .hero{ position:relative; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; overflow:hidden; padding:0 24px; }
+  .hero-eyebrow{
+    display:inline-flex; align-items:center; gap:10px; margin-bottom:30px;
+    padding:8px 16px; border:1px solid rgba(124,58,237,0.3); background:rgba(124,58,237,0.05);
+    font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.25em; color:#a0a0c0; text-transform:uppercase;
+  }
+  .hero-eyebrow .dot{ width:6px; height:6px; border-radius:50%; background:var(--accent); }
+  .hero h1{
+    font-size:clamp(3rem, 10vw, 8.5rem); font-weight:900; line-height:0.92; letter-spacing:-0.03em;
+    color:#fff; text-align:center; margin-bottom:30px; animation:slideUp 0.8s ease forwards;
+  }
+  .hero h1 .grad{
+    background:linear-gradient(90deg, #7c3aed, #06b6d4, #bf5fff);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .hero p{ color:#606080; font-size:clamp(15px,2vw,19px); max-width:560px; text-align:center; margin-bottom:44px; line-height:1.65; font-weight:300; }
+  .hero-actions{ display:flex; gap:16px; flex-wrap:wrap; justify-content:center; margin-bottom:80px; }
+  .btn-grad{
+    padding:16px 36px; background:linear-gradient(90deg,#7c3aed,#06b6d4); color:#fff;
+    font-weight:600; font-size:13px; letter-spacing:0.15em; text-transform:uppercase; transition:opacity .2s;
+  }
+  .btn-grad:hover{ opacity:0.9; }
+  .btn-ghost{
+    padding:16px 36px; border:1px solid rgba(255,255,255,0.2); color:#fff;
+    font-weight:600; font-size:13px; letter-spacing:0.15em; text-transform:uppercase; transition:background .2s;
+  }
+  .btn-ghost:hover{ background:rgba(255,255,255,0.05); }
+  .stats-row{ display:grid; grid-template-columns:repeat(3,1fr); gap:32px; max-width:520px; width:100%; border-top:1px solid rgba(255,255,255,0.05); padding-top:36px; }
+  .stat{ text-align:center; }
+  .stat .n{ font-size:24px; font-weight:900; color:#fff; }
+  .stat .l{ font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:0.15em; color:#606080; text-transform:uppercase; margin-top:4px; }
+  .scroll-hint{ position:absolute; bottom:28px; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:8px; }
+  .scroll-hint .line{ width:1px; height:44px; background:linear-gradient(to bottom, #7c3aed, transparent); }
+  .scroll-hint span{ font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.3em; color:#606080; text-transform:uppercase; }
+
+  /* ---------- MARQUEE ---------- */
+  .marquee-wrap{ border-top:1px solid rgba(255,255,255,0.05); border-bottom:1px solid rgba(255,255,255,0.05); background:#0d0d14; padding:16px 0; overflow:hidden; }
+  .marquee-track{ display:flex; white-space:nowrap; animation:marquee 22s linear infinite; width:max-content; }
+  .marquee-item{ display:inline-flex; align-items:center; gap:24px; padding:0 24px; }
+  .marquee-item span:first-child{ font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.2em; color:#606080; text-transform:uppercase; }
+  .marquee-item .sep{ color:#7c3aed; }
+
+  /* ---------- SECTIONS ---------- */
+  section{ padding:110px 24px; max-width:1200px; margin:0 auto; position:relative; }
+  .eyebrow{ font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.3em; text-transform:uppercase; margin-bottom:16px; }
+  .sec-title{ font-size:clamp(2.2rem, 5vw, 4.2rem); font-weight:900; color:#fff; line-height:1.02; }
+  .sec-title .grad{ background:linear-gradient(90deg, var(--g1), var(--g2)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+
+  /* what's inside cards */
+  .head-row{ display:flex; justify-content:space-between; align-items:flex-end; gap:24px; margin-bottom:60px; flex-wrap:wrap; }
+  .head-row p{ color:#606080; font-size:14px; max-width:280px; line-height:1.6; }
+  .feature-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:1px; background:rgba(255,255,255,0.05); }
+  @media (max-width:760px){ .feature-grid{ grid-template-columns:1fr; } }
+  .feature-card{ background:#050508; padding:38px; transition:background .3s; }
+  .feature-card:hover{ background:#0d0d14; }
+  .feature-num{ font-family:'JetBrains Mono',monospace; font-size:11px; color:#606080; }
+  .feature-icon{ font-size:26px; float:right; opacity:0.6; }
+  .feature-card h3{ font-size:22px; font-weight:700; color:#fff; margin:26px 0 12px; }
+  .feature-card p{ color:#606080; font-size:13.5px; line-height:1.65; margin-bottom:20px; }
+  .tag-row{ display:flex; gap:8px; flex-wrap:wrap; }
+  .tag{ font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:0.1em; text-transform:uppercase; padding:5px 10px; border:1px solid rgba(255,255,255,0.1); color:#a0a0c0; }
+
+  /* featured games */
+  .game-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
+  @media (max-width:760px){ .game-grid{ grid-template-columns:1fr; } }
+  .game-card{ position:relative; aspect-ratio:4/3; overflow:hidden; display:block; }
+  .game-card .bg{ position:absolute; inset:0; transition:transform .6s; }
+  .game-card:hover .bg{ transform:scale(1.06); }
+  .game-card .overlay-grid{
+    position:absolute; inset:0; opacity:0.2;
+    background-image:linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+    background-size:36px 36px;
+  }
+  .game-card .icon-big{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:100px; opacity:0.14; }
+  .game-card .info{ position:absolute; bottom:0; left:0; right:0; padding:26px; }
+  .game-card .kind{ font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:0.2em; text-transform:uppercase; margin-bottom:8px; }
+  .game-card h4{ font-size:26px; font-weight:900; color:#fff; }
+  .game-card .go{ margin-top:10px; font-family:'JetBrains Mono',monospace; font-size:12px; color:rgba(255,255,255,0.7); opacity:0; transform:translateY(8px); transition:all .35s; }
+  .game-card:hover .go{ opacity:1; transform:translateY(0); }
+
+  /* approach section */
+  .approach-grid{ display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; }
+  @media (max-width:820px){ .approach-grid{ grid-template-columns:1fr; } }
+  .approach-list{ display:flex; flex-direction:column; gap:16px; margin-top:36px; }
+  .approach-item{ display:flex; align-items:center; gap:14px; }
+  .approach-item .bullet{ width:6px; height:6px; border-radius:50%; background:var(--accent); flex-shrink:0; }
+  .approach-item span{ font-family:'JetBrains Mono',monospace; font-size:13px; color:#a0a0c0; }
+  .cube-scene{ position:relative; height:340px; display:flex; align-items:center; justify-content:center; }
+  .cube3d{ position:relative; transform-style:preserve-3d; }
+  .cube-face{ position:absolute; border:1px solid rgba(124,58,237,0.4); background:linear-gradient(135deg, rgba(124,58,237,0.06), rgba(6,182,212,0.1)); backdrop-filter:blur(2px); }
+
+  /* categories grid (was Team) */
+  .cat-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  @media (max-width:760px){ .cat-grid{ grid-template-columns:repeat(2,1fr); } }
+  .cat-tile{ position:relative; aspect-ratio:1; background:#0d0d14; border:1px solid rgba(255,255,255,0.05); overflow:hidden; display:flex; flex-direction:column; justify-content:flex-end; padding:18px; transition:border-color .3s; }
+  .cat-tile:hover{ border-color:rgba(255,255,255,0.15); }
+  .cat-tile .glyph{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:64px; opacity:0.28; transition:opacity .3s, transform .3s; }
+  .cat-tile:hover .glyph{ opacity:0.45; transform:scale(1.08); }
+  .cat-tile .name{ position:relative; font-weight:700; color:#fff; font-size:14px; }
+  .cat-tile .count{ position:relative; font-family:'JetBrains Mono',monospace; font-size:11px; margin-top:2px; }
+
+  /* fun facts (was testimonials) */
+  .facts-wrap{ padding:110px 24px; background:#0d0d14; border-top:1px solid rgba(255,255,255,0.05); border-bottom:1px solid rgba(255,255,255,0.05); }
+  .facts-inner{ max-width:820px; margin:0 auto; text-align:center; }
+  .facts-eyebrow{ font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.35em; color:#7c3aed; text-transform:uppercase; margin-bottom:50px; }
+  .fact-quote{ font-size:clamp(1.4rem, 3.2vw, 2.2rem); font-weight:300; color:#fff; line-height:1.5; margin-bottom:24px; min-height:120px; }
+  .fact-dots{ display:flex; justify-content:center; gap:10px; margin-top:36px; }
+  .fact-dots button{ height:2px; width:16px; background:rgba(255,255,255,0.2); border:none; transition:all .3s; }
+  .fact-dots button.active{ width:40px; background:#7c3aed; }
+
+  /* closing CTA */
+  .cta-section{ text-align:center; padding:130px 24px; }
+  .cta-section h2{ font-size:clamp(2.4rem,6vw,5rem); font-weight:900; color:#fff; margin-bottom:28px; line-height:1.02; }
+  .cta-section p{ color:#606080; font-size:16px; margin-bottom:40px; }
+
+  footer{ border-top:1px solid rgba(255,255,255,0.05); background:#050508; padding:36px 24px; }
+  .footer-inner{ max-width:1200px; margin:0 auto; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px; }
+  .footer-logo{ color:#fff; font-weight:700; font-size:15px; }
+  .footer-logo span{ color:var(--accent); }
+  .footer-copy{ font-family:'JetBrains Mono',monospace; font-size:11px; color:#606080; }
+  .footer-back{ font-family:'JetBrains Mono',monospace; font-size:11px; color:#606080; letter-spacing:0.1em; text-transform:uppercase; }
+  .footer-back:hover{ color:#fff; }
+</style>
+  <link rel="stylesheet" href="music-player.css">
+</head>
+<body>
+
+<div id="loader">
+  <div class="label">Loading arcade</div>
+  <div class="track"><div class="fill" id="loaderFill"></div></div>
+  <div class="pct" id="loaderPct">00%</div>
+  <div class="brand">AJ Solution</div>
+</div>
+
+<div class="noise">
+
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">AJ<span>·</span>SOLUTION</a>
+    <ul class="nav-links">
+      <li><a href="#inside">What's Inside</a></li>
+      <li><a href="#featured">Featured Games</a></li>
+      <li><a href="#categories">Categories</a></li>
+    </ul>
+    <a href="arcade/index.html" class="nav-cta">Enter Arcade</a>
+  </div>
+</nav>
+
+<section class="hero" style="min-height:100vh; padding-top:64px;">
+  <div class="grid-bg" style="position:absolute; inset:0;"></div>
+  <div class="orb animate-float-a" style="width:480px; height:480px; top:15%; left:-180px; background:radial-gradient(circle, #7c3aed, transparent);"></div>
+  <div class="orb animate-float-b" style="width:560px; height:560px; bottom:10%; right:-200px; background:radial-gradient(circle, #06b6d4, transparent);"></div>
+
+  <div class="perspective" style="position:absolute; top:110px; right:60px; opacity:0.6;" id="cubeHeroA"></div>
+  <div class="perspective" style="position:absolute; bottom:130px; left:60px; opacity:0.4;" id="cubeHeroB"></div>
+
+  <div style="position:absolute; inset:0; overflow:hidden; pointer-events:none;">
+    <div style="position:absolute; left:0; right:0; height:2px; background:linear-gradient(90deg, transparent, rgba(6,182,212,0.3), transparent); animation:scanline 8s linear infinite;"></div>
+  </div>
+
+  <div style="position:relative; z-index:2; display:flex; flex-direction:column; align-items:center;">
+    <div class="hero-eyebrow"><span class="dot animate-pulse-neon"></span> 9 originals + a curated multiplayer directory</div>
+    <h1>GAMES WORTH<br><span class="grad">GETTING LOST</span><br>IN</h1>
+    <p>Nine games built from scratch, live rankings that update in real time, and a curated directory of the best things to play when you want more.</p>
+    <div class="hero-actions">
+      <a href="arcade/index.html" class="btn-grad">Enter the arcade</a>
+      <a href="index.html" class="btn-ghost">Back to hub</a>
+    </div>
+    <div class="stats-row">
+      <div class="stat"><div class="n">9</div><div class="l">Built Here</div></div>
+      <div class="stat"><div class="n">51</div><div class="l">Total Games</div></div>
+      <div class="stat"><div class="n">7</div><div class="l">Categories</div></div>
+    </div>
+  </div>
+
+  <div class="scroll-hint"><div class="line"></div><span>Scroll</span></div>
+</section>
+
+<div class="marquee-wrap">
+  <div class="marquee-track" id="marqueeTrack"></div>
+</div>
+
+<section id="inside">
+  <div class="head-row">
+    <div>
+      <div class="eyebrow" style="color:#7c3aed;">What's Inside</div>
+      <h2 class="sec-title">Four ways<br>to <span class="grad" style="--g1:#7c3aed; --g2:#06b6d4;">play</span></h2>
+    </div>
+    <p>Everything in the arcade sorts into one of these — built here, linked out, trained for, or ranked on.</p>
+  </div>
+  <div class="feature-grid" id="featureGrid"></div>
+</section>
+
+<section id="featured">
+  <div style="margin-bottom:60px;">
+    <div class="eyebrow" style="color:#06b6d4;">Play Now</div>
+    <h2 class="sec-title">Featured<br><span class="grad" style="--g1:#06b6d4; --g2:#bf5fff;">games</span></h2>
+  </div>
+  <div class="game-grid" id="gameGrid"></div>
+</section>
+
+<section style="background:#0d0d14; border-top:1px solid rgba(255,255,255,0.05); border-bottom:1px solid rgba(255,255,255,0.05); max-width:none; padding:110px 24px;">
+  <div style="max-width:1200px; margin:0 auto;">
+    <div class="orb animate-float-a" style="width:380px; height:380px; top:0; left:8%; background:radial-gradient(circle, #7c3aed, transparent);"></div>
+    <div class="orb animate-float-b" style="width:380px; height:380px; bottom:0; right:8%; background:radial-gradient(circle, #06b6d4, transparent);"></div>
+    <div class="approach-grid" style="position:relative;">
+      <div>
+        <div class="eyebrow" style="color:#bf5fff;">The Approach</div>
+        <h2 class="sec-title" style="margin-bottom:26px;">Built to<br>actually<br><span class="grad" style="--g1:#bf5fff; --g2:#06b6d4;">be played</span></h2>
+        <p style="color:#606080; line-height:1.7; max-width:420px;">No installs, no accounts to start playing, no dead links pretending to be games. Every built-in title runs on plain canvas — light enough to load instantly, solid enough to actually finish a round on.</p>
+        <div class="approach-list">
+          <div class="approach-item"><span class="bullet"></span><span>Canvas-based, zero downloads</span></div>
+          <div class="approach-item"><span class="bullet"></span><span>Live Firebase-backed leaderboards</span></div>
+          <div class="approach-item"><span class="bullet"></span><span>Touch controls built for mobile, not bolted on</span></div>
+          <div class="approach-item"><span class="bullet"></span><span>Free forever, no accounts required</span></div>
+        </div>
+      </div>
+      <div class="cube-scene perspective">
+        <div id="cubeApproach"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div style="text-align:center; max-width:640px; margin:0 auto 60px;">
+    <div class="eyebrow" style="color:#7c3aed; justify-content:center; display:flex;">Categories</div>
+    <h2 class="sec-title">Browse by<br><span class="grad" style="--g1:#7c3aed; --g2:#06b6d4;">category</span></h2>
+  </div>
+  <div class="cat-grid" id="catGrid"></div>
+</section>
+
+<div class="facts-wrap">
+  <div class="facts-inner">
+    <div class="facts-eyebrow">Did you know</div>
+    <div class="fact-quote" id="factText"></div>
+    <div class="fact-dots" id="factDots"></div>
+  </div>
+</div>
+
+<section class="cta-section">
+  <h2>Ready to<br><span class="grad" style="--g1:#06b6d4; --g2:#bf5fff;">play?</span></h2>
+  <p>Everything's free, nothing needs an account to try.</p>
+  <a href="arcade/index.html" class="btn-grad" style="display:inline-block;">Enter the arcade →</a>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <a href="index.html" class="footer-logo">AJ<span>·</span>SOLUTION</a>
+    <div class="footer-copy">© 2026 AJ Solution Pvt Ltd</div>
+    <a href="index.html" class="footer-back">← Back to hub</a>
+  </div>
+</footer>
+
+</div>
+
+<script>
+  // ---------- Loader ----------
+  (function(){
+    const fill = document.getElementById('loaderFill');
+    const pct = document.getElementById('loaderPct');
+    const loader = document.getElementById('loader');
+    let p = 0;
+    const t = setInterval(() => {
+      p = Math.min(100, p + 4);
+      fill.style.width = p + '%';
+      pct.textContent = String(p).padStart(2, '0') + '%';
+      if (p >= 100) {
+        clearInterval(t);
+        setTimeout(() => { loader.style.opacity = '0'; setTimeout(() => loader.remove(), 300); }, 250);
+      }
+    }, 28);
+  })();
+
+  // ---------- Nav scroll state ----------
+  window.addEventListener('scroll', () => {
+    document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 20);
+  });
+
+  // ---------- 3D cube builder ----------
+  function buildCube(container, size, color) {
+    const half = size / 2;
+    const el = document.createElement('div');
+    el.className = 'cube3d animate-spin3d';
+    el.style.width = size + 'px';
+    el.style.height = size + 'px';
+    const faces = [
+      { t: `translateZ(${half}px)` },
+      { t: `translateZ(-${half}px) rotateY(180deg)` },
+      { t: `translateX(${half}px) rotateY(90deg)` },
+      { t: `translateX(-${half}px) rotateY(-90deg)` },
+      { t: `translateY(-${half}px) rotateX(90deg)` },
+      { t: `translateY(${half}px) rotateX(-90deg)` },
+    ];
+    faces.forEach(f => {
+      const face = document.createElement('div');
+      face.className = 'cube-face';
+      face.style.width = size + 'px';
+      face.style.height = size + 'px';
+      face.style.transform = f.t;
+      face.style.borderColor = color + '66';
+      el.appendChild(face);
+    });
+    container.appendChild(el);
+  }
+  buildCube(document.getElementById('cubeHeroA'), 80, '#7c3aed');
+  buildCube(document.getElementById('cubeHeroB'), 56, '#06b6d4');
+
+  (function(){
+    const wrap = document.getElementById('cubeApproach');
+    const specs = [
+      { size: 110, color: '#7c3aed', cls: 'animate-float-a', top: -50, left: -50 },
+      { size: 70,  color: '#06b6d4', cls: 'animate-float-b', top: 70, left: 90 },
+      { size: 150, color: '#bf5fff', cls: 'animate-float-c', top: 0, left: 0 },
+      { size: 55,  color: '#10b981', cls: 'animate-float-a', top: 120, left: -30 },
+    ];
+    specs.forEach(s => {
+      const holder = document.createElement('div');
+      holder.className = s.cls;
+      holder.style.position = 'absolute';
+      holder.style.top = s.top + 'px';
+      holder.style.left = s.left + 'px';
+      buildCube(holder, s.size, s.color);
+      wrap.appendChild(holder);
+    });
+  })();
+
+  // ---------- Marquee ----------
+  const marqueeItems = ['Built From Scratch', 'IO Arena', 'Live Rankings', 'Brain Train', 'No Downloads', 'Touch Controls', 'Word Nerd', 'Multiplayer'];
+  const marqueeHtml = [...marqueeItems, ...marqueeItems].map(t =>
+    `<span class="marquee-item"><span>${t}</span><span class="sep">✦</span></span>`
+  ).join('');
+  document.getElementById('marqueeTrack').innerHTML = marqueeHtml;
+
+  // ---------- Feature cards ----------
+  const features = [
+    { num:'01', icon:'🛠️', title:'Built Here', desc:'Nine games written from the ground up — canvas-based, no external engine, no downloads.', tags:['Canvas', 'Vanilla JS', 'Touch-first'] },
+    { num:'02', icon:'🌐', title:'IO Arena', desc:'19 real-time multiplayer games — grow, build, or battle against people online right now.', tags:['Multiplayer', 'Real-time', 'No install'] },
+    { num:'03', icon:'🧠', title:'Brain Train', desc:'Chess, typing tests, competitive Tetris, reaction benchmarks — for when you want a challenge.', tags:['Chess', 'Typing', 'Puzzles'] },
+    { num:'04', icon:'🏆', title:'Live Rankings', desc:'Every built-in game reports to a shared leaderboard — see where you land, updated instantly.', tags:['Firebase', 'Real-time', 'Free'] },
+  ];
+  document.getElementById('featureGrid').innerHTML = features.map(f => `
+    <div class="feature-card">
+      <span class="feature-icon">${f.icon}</span>
+      <span class="feature-num">${f.num}</span>
+      <h3>${f.title}</h3>
+      <p>${f.desc}</p>
+      <div class="tag-row">${f.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+    </div>`).join('');
+
+  // ---------- Featured games ----------
+  const featured = [
+    { name:'Dungeon Crawl', cat:'Built Here / RPG', year:'2026', icon:'🗡️', accent:'#7c3aed', grad:'linear-gradient(135deg, #1a0533, #0a1a33 50%, #0d0824)', url:'game/dungeon.html' },
+    { name:'Traffic Racer', cat:'Built Here / Racing', year:'2026', icon:'🏎️', accent:'#06b6d4', grad:'linear-gradient(135deg, #001a22, #001510 50%, #002030)', url:'game/car.html' },
+    { name:'Dino Jump', cat:'Built Here / Endless Runner', year:'2026', icon:'🦖', accent:'#bf5fff', grad:'linear-gradient(135deg, #1a0028, #100040 50%, #200050)', url:'game/dino.html' },
+    { name:'Pac-Man', cat:'Built Here / Arcade Classic', year:'2026', icon:'👻', accent:'#10b981', grad:'linear-gradient(135deg, #001a15, #002215 50%, #003020)', url:'game/pacman.html' },
+  ];
+  document.getElementById('gameGrid').innerHTML = featured.map(g => `
+    <a class="game-card" href="${g.url}">
+      <div class="bg" style="background:${g.grad}; position:absolute; inset:0;"></div>
+      <div class="overlay-grid"></div>
+      <div class="icon-big" style="color:${g.accent};">${g.icon}</div>
+      <div class="info">
+        <div class="kind" style="color:${g.accent};">${g.cat}</div>
+        <h4>${g.name}</h4>
+        <div class="go">Play now →</div>
+      </div>
+    </a>`).join('');
+
+  // ---------- Categories ----------
+  const categories = [
+    { name:'Built Here', count:'9 games', icon:'🛠️', color:'#f59e0b' },
+    { name:'IO Arena', count:'19 games', icon:'🌐', color:'#06b6d4' },
+    { name:'Brain Train', count:'6 games', icon:'🧠', color:'#bf5fff' },
+    { name:'Party & Multiplayer', count:'6 games', icon:'🎉', color:'#e86bd0' },
+    { name:'Arcade Portals', count:'4 games', icon:'🕹️', color:'#8aa6ff' },
+    { name:'Sims & Sandboxes', count:'4 games', icon:'🌱', color:'#10b981' },
+  ];
+  document.getElementById('catGrid').innerHTML = categories.map(c => `
+    <a class="cat-tile" href="arcade/index.html">
+      <div class="glyph" style="color:${c.color};">${c.icon}</div>
+      <div class="name">${c.name}</div>
+      <div class="count" style="color:${c.color}99;">${c.count}</div>
+    </a>`).join('');
+
+  // ---------- Fun facts carousel ----------
+  const facts = [
+    'Dino Jump runs a full day/night cycle — stick around and watch the stars come out.',
+    'The Dungeon Crawl map, monsters, and loot regenerate fresh every single run.',
+    'Every built-in game reports live to the same leaderboard — check Rankings to see who\'s on top.',
+    'The IO Arena has 19 real-time multiplayer games, from tank battles to territory claiming.',
+  ];
+  let factIndex = 0;
+  const factText = document.getElementById('factText');
+  const factDots = document.getElementById('factDots');
+  factDots.innerHTML = facts.map((_, i) => `<button data-i="${i}"></button>`).join('');
+  function showFact(i) {
+    factIndex = i;
+    factText.textContent = facts[i];
+    factText.style.animation = 'none';
+    void factText.offsetWidth;
+    factText.style.animation = 'fadeIn 0.6s ease forwards';
+    factDots.querySelectorAll('button').forEach((b, bi) => b.classList.toggle('active', bi === i));
+  }
+  factDots.querySelectorAll('button').forEach(b => b.addEventListener('click', () => showFact(+b.dataset.i)));
+  showFact(0);
+  setInterval(() => showFact((factIndex + 1) % facts.length), 5000);
+</script>
+
+  <script src="music-player.js" defer></script>
+</body>
+</html>
